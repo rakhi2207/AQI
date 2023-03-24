@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+<body>
+    <header>
+        <input type="text" placeholder="Search location or city" id="city"/>   
+        <div class="restSearch">
+            <input type="date" id="date" name="date">
+            <button id="submit">Search</button>
+        </div>
+    </header>
+
+    <div id="contains">
+        <div id="main"></div>
+        <div class="map">
+            <img src="./image/map.png">
+            <h1 id="newData"></h1>
+            <h1>Air Quality Map</h1>
+            <button id="mapButton" onclick="getMap()">View Map</button>
+        </div>
+    </div>
+ 
+    <div id="pollutants">
+        <p>Major Pollutants in Haryana</p>
+        <div class="pollutants_type">
+            <div class="co type">
+                <img src="./image/CO.png">
+                <p>co2</p>
+            </div>
+            <div class="o3 type">
+                <img src="./image/o3.webp">
+                <p>co2</p>
+            </div>
+            <div class="pm2 type">
+                <img src="./image/pm2.5.webp">
+                <p>co2</p>
+            </div>
+            <div class="pm10 type">
+                <img src="./image/pm10.png">
+                <p>co2</p>
+            </div>
+            <div class="no2 type">
+                <img src="./image/no2.png">
+                <p>co2</p>
+            </div>
+            <div class="so2 type">
+                <img src="./image/so2.png">
+                <p>co2</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/index.js"></script>
+</body>
+</html>
