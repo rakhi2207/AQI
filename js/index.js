@@ -97,5 +97,5 @@ document.getElementById('submit').addEventListener(('click'),async (event)=>
 function getMap()
 {    let dateValue=document.getElementById('date').value;
     let areaValue=document.getElementById('city').value;
-    window.location.href= `../Map.html?area=${areaValue}&date=${dateValue}`;
+    window.location.href= `./Map.html?area=${areaValue}&date=${dateValue}`;
 }
