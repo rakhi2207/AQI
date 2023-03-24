@@ -32,9 +32,10 @@ function applyButtonColor(Quality,button)
 
 function addPollutants(data,area)
 {
+    let perfectArea=area.charAt(0).toUpperCase()+area.substring(1).toLowerCase();
     let pollutant=document.getElementById('pollutants');
     pollutant.style.display='block';
-    pollutant.children[0].innerHTML=`Major Pollutants in ${area}`
+    pollutant.children[0].innerHTML=`Major Pollutants in ${perfectArea}`
     let co=document.getElementsByClassName('co')[0];
     co.children[1].innerText=data.CO;
     let o3=document.getElementsByClassName('o3')[0];
@@ -59,7 +60,7 @@ document.getElementById('submit').addEventListener(('click'),async (event)=>
 
     if(data.State===null)
     {
-        alert("Data Not Avaialble");
+        alert("Data Not Avaialble")
         return ;
     }
     let mainDiv=document.getElementById('main');
@@ -67,7 +68,8 @@ document.getElementById('submit').addEventListener(('click'),async (event)=>
     let addDiv=document.createElement('div');
     addDiv.classList.add('addDiv')
     let h3=document.createElement('h3')
-    h3.innerText=`${areaValue} Air Quality Index (AQI)`
+    let perfectArea=areaValue.charAt(0).toUpperCase()+areaValue.substring(1).toLowerCase();
+    h3.innerText=`${perfectArea} Air Quality Index (AQI)`
     addDiv.appendChild(h3);
 
     let p=document.createElement('p');
@@ -85,7 +87,8 @@ document.getElementById('submit').addEventListener(('click'),async (event)=>
     mainDiv.appendChild(addDiv);
 
     let addData=document.getElementById('newData')
-    addData.innerText=areaValue;
+    console.log(perfectArea)
+    addData.innerText=perfectArea;
     addData.style.color='white';
 
     addPollutants(data,areaValue);
@@ -94,5 +97,5 @@ document.getElementById('submit').addEventListener(('click'),async (event)=>
 function getMap()
 {    let dateValue=document.getElementById('date').value;
     let areaValue=document.getElementById('city').value;
-    window.location.href= `./Map.html?area=${areaValue}&date=${dateValue}`;
+    window.location.href= `../Map.html?area=${areaValue}&date=${dateValue}`;
 }
