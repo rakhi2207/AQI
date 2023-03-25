@@ -5,7 +5,7 @@ let city=document.getElementById('city');
 
 city.addEventListener('keyup',async (e)=>
 {
-    const value= await fetch(`http://localhost:8080/v1/listState`);
+    const value= await fetch(`https://OutstandingMoralFirm.rakhi2207.repl.co/v1/listState`);
     const data=await value.json();
     document.getElementsByClassName('list')[0].innerHTML=''
     for(let value of data)
@@ -45,7 +45,7 @@ async function delayMapPlot(map,dateValue,marker)
               let sw=bounds._sw;
                    
 
-              const value= await fetch(`http://localhost:8080/v1/state/${dateValue}`);
+              const value= await fetch(`https://OutstandingMoralFirm.rakhi2207.repl.co/v1/state/${dateValue}`);
               const data=await value.json() 
 
               const filteredData=await getLatLong(data,ne.lng,sw.lng,ne.lat,sw.lat)
@@ -202,7 +202,7 @@ async function MapAddition(areaValue,dateValue)
 
 async function getData(area,date)
 {
-    const value=await fetch(`http://localhost:8080/v1/tasks/${area}/${date}`);
+    const value=await fetch(`https://OutstandingMoralFirm.rakhi2207.repl.co/v1/tasks/${area}/${date}`);
     const data=await value.json();
     return data;
 }
