@@ -1,7 +1,33 @@
 mapboxgl.accessToken = 'pk.eyJ1IjoicmFraGkyMjA3IiwiYSI6ImNsZWNvd2RzZDAwZ3QzcnBodXduMjI0Zm4ifQ.M8IVXBJ9TetScihLa7yXRA';
 let cl=document.location.href;
 let url=(new URL(cl)).searchParams;
+let city=document.getElementById('city');
 
+city.addEventListener('keyup',async (e)=>
+{
+    const value= await fetch(`http://localhost:8080/v1/listState`);
+    const data=await value.json();
+    document.getElementsByClassName('list')[0].innerHTML=''
+    for(let value of data)
+    {
+        if(value.toLowerCase().startsWith(city.value.toLowerCase())&&city.value!='')
+        {
+            console.log(value)
+            let listitem=document.createElement('li');
+            listitem.classList.add('listItems');
+            listitem.style.cursor='pointer';
+            listitem.addEventListener('click',()=>{displayName(value)});
+            listitem.innerHTML=value;
+            document.getElementsByClassName('list')[0].appendChild(listitem)
+        }
+    }
+})
+
+function displayName(value)
+{
+    city.value=value;
+    document.getElementsByClassName('list')[0].innerHTML=''
+}
 async function getCoordinates(area)
 {
   const conversionAPI=await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${area}.json?country=in&access_token=pk.eyJ1IjoicmFraGkyMjA3IiwiYSI6ImNsZWNvd2RzZDAwZ3QzcnBodXduMjI0Zm4ifQ.M8IVXBJ9TetScihLa7yXRA`)
@@ -12,6 +38,32 @@ async function getCoordinates(area)
   }
 }
 
+async function delayMapPlot(map,dateValue,marker)
+{
+              var bounds = map.getBounds();
+              let ne=bounds._ne;
+              let sw=bounds._sw;
+                   
+
+              const value= await fetch(`http://localhost:8080/v1/state/${dateValue}`);
+              const data=await value.json() 
+
+              const filteredData=await getLatLong(data,ne.lng,sw.lng,ne.lat,sw.lat)
+                console.log(filteredData)
+              filteredData.map((items)=>
+              {
+                  let coordinates=items.address;
+                  const el = document.createElement('div');
+                  addClassNameImage(el,items.Quality);
+                     let value= new mapboxgl.Marker(el).setLngLat(coordinates).setPopup(
+                      new mapboxgl.Popup({ offset: 25 }) 
+                        .setHTML(
+                            `<h3>${items.AQI}</h3><p>${items.Quality}</p><br><p>${items.value}</p><br>`
+                        )
+                    ).addTo(map);
+                    marker.push(value);
+              })
+}
 async function addBlock(areaValue,dateValue)
 {
     // console.log(areaValue,dateValue)
@@ -125,35 +177,12 @@ async function MapAddition(areaValue,dateValue)
           
             // Schedule a new timeout to show the boundaries after 5 seconds
             timeoutId = setTimeout(async function() {
-              var bounds = map.getBounds();
-              let ne=bounds._ne;
-              let sw=bounds._sw;
-                   
-
-              const value= await fetch(`https://OutstandingMoralFirm.rakhi2207.repl.co/v1/state/${dateValue}`);
-              const data=await value.json() 
-
-              const filteredData=await getLatLong(data,ne.lng,sw.lng,ne.lat,sw.lat)
-                console.log(filteredData)
-              filteredData.map((items)=>
-              {
-                  let coordinates=items.address;
-                  const el = document.createElement('div');
-                  addClassNameImage(el,items.Quality);
-                     let value= new mapboxgl.Marker(el).setLngLat(coordinates).setPopup(
-                      new mapboxgl.Popup({ offset: 25 }) 
-                        .setHTML(
-                            `<h3>${items.AQI}</h3><p>${items.Quality}</p><br><p>${items.value}</p><br>`
-                        )
-                    ).addTo(map);
-                    marker.push(value);
-              })
-          
+                console.log('hello',timeoutId)
+                delayMapPlot(map,dateValue,marker)
             },500);
           });
 
           map.on('load',function() {
-            console.log('map moving')
             // Cancel any previously scheduled timeouts
             clearTimeout(timeoutId);
             for(let x of marker)
@@ -164,30 +193,8 @@ async function MapAddition(areaValue,dateValue)
           
             // Schedule a new timeout to show the boundaries after 5 seconds
             timeoutId = setTimeout(async function() {
-              var bounds = map.getBounds();
-              let ne=bounds._ne;
-              let sw=bounds._sw;
-                   
-
-              const value= await fetch(`https://OutstandingMoralFirm.rakhi2207.repl.co/v1/state/${dateValue}`);
-              const data=await value.json() 
-
-              const filteredData=await getLatLong(data,ne.lng,sw.lng,ne.lat,sw.lat)
-                console.log(filteredData)
-              filteredData.map((items)=>
-              {
-                  let coordinates=items.address;
-                  const el = document.createElement('div');
-                  addClassNameImage(el,items.Quality);
-                     let value= new mapboxgl.Marker(el).setLngLat(coordinates).setPopup(
-                      new mapboxgl.Popup({ offset: 25 }) 
-                        .setHTML(
-                    `<h3>${items.AQI}</h3><p>${items.Quality}</p><br><p>${items.value}</p><br>`
-                        )
-                    ).addTo(map);
-                    marker.push(value);
-              })
-          
+                console.log('hello',timeoutId)
+                delayMapPlot(map,dateValue,marker)        
             },500);
           });
     map.addControl(new mapboxgl.NavigationControl());
@@ -195,9 +202,8 @@ async function MapAddition(areaValue,dateValue)
 
 async function getData(area,date)
 {
-    const value=await fetch(`https://OutstandingMoralFirm.rakhi2207.repl.co/v1/tasks/${area}/${date}`);
+    const value=await fetch(`http://localhost:8080/v1/tasks/${area}/${date}`);
     const data=await value.json();
-    // console.log(data)
     return data;
 }
 
@@ -211,6 +217,5 @@ document.getElementById('submit').addEventListener(('click'),async (event)=>
     addBlock(areaValue,dateValue);
     MapAddition(areaValue,dateValue)
 })
-
 
 

@@ -1,7 +1,33 @@
-// const path = require('path');
+let city=document.getElementById('city');
+
+city.addEventListener('keyup',async (e)=>
+{
+    const value= await fetch(`http://localhost:8080/v1/listState`);
+    const data=await value.json();
+    document.getElementsByClassName('list')[0].innerHTML=''
+    for(let value of data)
+    {
+        if(value.toLowerCase().startsWith(city.value.toLowerCase())&&city.value!='')
+        {
+            console.log(value)
+            let listitem=document.createElement('li');
+            listitem.classList.add('listItems');
+            listitem.style.cursor='pointer';
+            listitem.addEventListener('click',()=>{displayName(value)});
+            listitem.innerHTML=value;
+            document.getElementsByClassName('list')[0].appendChild(listitem)
+        }
+    }
+})
+
+function displayName(value)
+{
+    city.value=value;
+    document.getElementsByClassName('list')[0].innerHTML=''
+}
 async function getData(area,date)
 {
-    const value=await fetch(`https://OutstandingMoralFirm.rakhi2207.repl.co/v1/tasks/${area}/${date}`);
+    const value=await fetch(`http://localhost:8080/v1/tasks/${area}/${date}`);
     const data=await value.json();
     return data;
 }
@@ -97,5 +123,5 @@ document.getElementById('submit').addEventListener(('click'),async (event)=>
 function getMap()
 {    let dateValue=document.getElementById('date').value;
     let areaValue=document.getElementById('city').value;
-    window.location.href= `../Map.html?area=${areaValue}&date=${dateValue}`;
+    window.location.href= `./Map.html?area=${areaValue}&date=${dateValue}`;
 }
